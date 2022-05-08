@@ -16,8 +16,9 @@ class Repository {
     suspend fun getPullRequests(
         owner: String,
         repos: String,
+        page: Int
     ): Response<List<PullRequest>> {
-        return RetrofitInstance.api.getPullRequests(owner, repos)
+        return RetrofitInstance.api.getPullRequests(owner, repos, "all", "popularity", page)
     }
 
 }

@@ -10,7 +10,7 @@ import com.carvalho.desafio_itau.model.pull_requests.PullRequest
 
 class AdapterPulls() : RecyclerView.Adapter<AdapterPulls.CardViewHolder>() {
 
-    var contents = emptyList<PullRequest>()
+    var contents = emptyList<PullRequest?>()
 
     class CardViewHolder(var binding: CardviewPullsBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -23,11 +23,11 @@ class AdapterPulls() : RecyclerView.Adapter<AdapterPulls.CardViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.binding.tvTitulo.text = contents[position].title
-        holder.binding.tvDescricao.text = contents[position].body
-        holder.binding.tvUser.text = contents[position].user.login
+        holder.binding.tvTitulo.text = contents[position]?.title
+        holder.binding.tvDescricao.text = contents[position]?.body
+        holder.binding.tvUser.text = contents[position]?.user?.login
 
-        when (contents[position].state) {
+        when (contents[position]?.state) {
             "open" -> {
                 holder.binding.tvStatus.setTextColor(Color.GREEN)
             }
@@ -35,10 +35,10 @@ class AdapterPulls() : RecyclerView.Adapter<AdapterPulls.CardViewHolder>() {
                 holder.binding.tvStatus.setTextColor(Color.RED)
             }
         }
-        holder.binding.tvStatus.text = contents[position].state.replaceFirstChar { it.uppercase() }
+        holder.binding.tvStatus.text = contents[position]!!.state.replaceFirstChar { it.uppercase() }
 
 
-        Glide.with(holder.itemView.context).load(contents[position].user.avatar_url).circleCrop()
+        Glide.with(holder.itemView.context).load(contents[position]?.user?.avatar_url).circleCrop()
             .into(holder.binding.imUser)
     }
 
@@ -46,7 +46,7 @@ class AdapterPulls() : RecyclerView.Adapter<AdapterPulls.CardViewHolder>() {
         return contents.size
     }
 
-    fun setList(list: List<PullRequest>) {
+    fun setList(list: List<PullRequest?>) {
         contents = list
         notifyDataSetChanged()
     }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.carvalho.desafio_itau.MainViewModel
@@ -30,9 +31,9 @@ class PullsFragment : Fragment() {
 
     private lateinit var nameRepos: String
     private lateinit var owner: String
-    private lateinit var pullsOpen: String
+    private var contPage: Int = 1
 
-    private var list: List<PullRequest>? = listOf()
+    private var list: MutableList<PullRequest?> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +49,11 @@ class PullsFragment : Fragment() {
 
         viewModel.responsePullRequests.observe(viewLifecycleOwner) {
             if (it.body() != null) {
-                list = it.body()!!
-                pullsOpen = list?.size.toString()
+                it.body()!!.forEach { item ->
+                    if (!list.contains(item)) {
+                        list.add(item)
+                    }
+                }
             }
 
             Log.d("Listagem Pulls", it.body().toString())
@@ -59,13 +63,21 @@ class PullsFragment : Fragment() {
             binding.rvPulls.visibility = View.VISIBLE
         }
 
+        binding.nsvScroll.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
+                contPage++
+                binding.progressBar.visibility = View.VISIBLE
+                //getContentsForList(owner, nameRepos, contPage)
+                Log.i("msg Scroll end", contPage.toString())
+            }
+        })
+
         return binding.root
     }
 
     private fun includeContentsInHeader() {
         binding.tvNameRespos.text = nameRepos
         binding.tvOwner.text = owner
-        binding.tvPullsOpen.text = pullsOpen
     }
 
     private fun includeContentsInPage() {
@@ -79,16 +91,16 @@ class PullsFragment : Fragment() {
         if (viewModel.itemSelect != null) {
             nameRepos = viewModel.itemSelect?.name!!
             owner = viewModel.itemSelect?.owner?.login!!
-            getContentsForList(owner!!, nameRepos!!)
+            getContentsForList(owner!!, nameRepos!!, contPage)
         }
     }
 
-    private fun getContentsForList(owner: String, nameRepos: String) {
-        viewModel.getPullRequests(owner, nameRepos)
+    private fun getContentsForList(owner: String, nameRepos: String, contPage: Int) {
+        viewModel.getPullRequests(owner, nameRepos, contPage)
     }
 
     private fun setListInAdapter() {
-        adapterList.setList(list!!)
+        adapterList.setList(list)
     }
 
     private fun setAdapter() {
@@ -105,7 +117,8 @@ class PullsFragment : Fragment() {
     override fun onResume() {
         binding.progressBar.visibility = View.VISIBLE
         binding.rvPulls.visibility = View.INVISIBLE
-        list = null
+        list.clear()
+        contPage = 1
         super.onResume()
     }
 }

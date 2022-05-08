@@ -20,5 +20,8 @@ interface ApiService {
     suspend fun getPullRequests(
         @Path("owner") owner: String,
         @Path("repository") repos: String,
+        @Query("state") state: String,
+        @Query("sort") sort: String,
+        @Query("page") page: Int,
     ): Response<List<PullRequest>>
 }

@@ -39,10 +39,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getPullRequests(owner: String, repos: String) {
+    fun getPullRequests(owner: String, repos: String, page: Int) {
         viewModelScope.launch {
             try {
-                val response = repository.getPullRequests(owner, repos)
+                val response = repository.getPullRequests(owner, repos, page)
                 _responsePullRequests.value = response
             } catch (e: Exception) {
                 Log.e("Err", e.message.toString())
