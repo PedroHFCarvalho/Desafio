@@ -44,7 +44,10 @@ class ListFragment : Fragment(), ItemClickListener {
         viewModel.responseRepositoryGit.observe(viewLifecycleOwner) {
             if (it.body()!!.items != null) {
                 it.body()!!.items!!.forEach { item ->
-                    list.add(item)
+                    if(!list.contains(item)){
+                        list.add(item)
+                    }
+
                 }
             }
             Log.d("Listagem", it.body()!!.items.toString())

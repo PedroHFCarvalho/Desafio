@@ -42,8 +42,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
         supportActionBar?.title = null
         binding.imLogo.setOnClickListener {
-            val scroll = findViewById<NestedScrollView>(R.id.nsvScroll)
-            scroll.scrollTo(0, 0)
+            findNavController(R.id.fvMain).navigate(R.id.listFragment)
         }
     }
 
