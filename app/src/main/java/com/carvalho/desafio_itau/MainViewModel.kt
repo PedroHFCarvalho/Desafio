@@ -1,13 +1,12 @@
 package com.carvalho.desafio_itau
 
-import com.carvalho.desafio_itau.model.RepositoryGithub
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.carvalho.desafio_itau.data.RetrofitInstance
 import com.carvalho.desafio_itau.model.ItemGithub
+import com.carvalho.desafio_itau.model.RepositoryGithub
 import com.carvalho.desafio_itau.model.pull_requests.PullRequest
 import com.carvalho.desafio_itau.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,23 +1,20 @@
 package com.carvalho.desafio_itau.ui.fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.carvalho.desafio_itau.MainViewModel
-import com.carvalho.desafio_itau.adapter.AdapterList
+import com.carvalho.desafio_itau.R
 import com.carvalho.desafio_itau.adapter.AdapterPulls
 import com.carvalho.desafio_itau.databinding.FragmentPullsBinding
-import com.carvalho.desafio_itau.model.ItemGithub
 import com.carvalho.desafio_itau.model.pull_requests.PullRequest
 
 
@@ -56,19 +53,23 @@ class PullsFragment : Fragment() {
                 }
             }
 
-            Log.d("Listagem Pulls", it.body().toString())
+            //Log.d("Listagem Pulls", it.body().toString())
             includeContentsInPage()
             includeContentsInHeader()
             binding.progressBar.visibility = View.INVISIBLE
             binding.rvPulls.visibility = View.VISIBLE
+            binding.clContentCollapsing.visibility = View.VISIBLE
         }
 
         binding.nsvScroll.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            //Log.i("scrollY", scrollY.toString())
+            //Log.i("measuredHeight", v.measuredHeight.toString())
+            //Log.i("measuredHeight getChildAt", v.getChildAt(0).measuredHeight.toString())
             if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
                 contPage++
                 binding.progressBar.visibility = View.VISIBLE
-                //getContentsForList(owner, nameRepos, contPage)
-                Log.i("msg Scroll end", contPage.toString())
+                getContentsForList(owner, nameRepos, contPage)
+                //Log.i("msg Scroll end", contPage.toString())
             }
         })
 
@@ -83,6 +84,7 @@ class PullsFragment : Fragment() {
     private fun includeContentsInPage() {
         binding.progressBar.visibility = View.VISIBLE
         binding.rvPulls.visibility = View.INVISIBLE
+        binding.clContentCollapsing.visibility = View.GONE
         setAdapter()
         setListInAdapter()
     }
@@ -91,7 +93,13 @@ class PullsFragment : Fragment() {
         if (viewModel.itemSelect != null) {
             nameRepos = viewModel.itemSelect?.name!!
             owner = viewModel.itemSelect?.owner?.login!!
-            getContentsForList(owner!!, nameRepos!!, contPage)
+
+            Glide.with(requireContext()).load(viewModel.itemSelect!!.owner.avatarURL)
+                .circleCrop()
+                .placeholder(R.drawable.ic_baseline_account_circle)
+                .into(binding.imOwnerRepos)
+
+            getContentsForList(owner, nameRepos, contPage)
         }
     }
 
@@ -117,6 +125,7 @@ class PullsFragment : Fragment() {
     override fun onResume() {
         binding.progressBar.visibility = View.VISIBLE
         binding.rvPulls.visibility = View.INVISIBLE
+        binding.clContentCollapsing.visibility = View.GONE
         list.clear()
         contPage = 1
         super.onResume()

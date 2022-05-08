@@ -1,18 +1,13 @@
 package com.carvalho.desafio_itau.ui
 
 import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.carvalho.desafio_itau.MainViewModel
 import com.carvalho.desafio_itau.R
 import com.carvalho.desafio_itau.databinding.ActivityMainBinding
-import com.carvalho.desafio_itau.repository.Repository
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,9 +36,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController)
         supportActionBar?.title = null
-        binding.imLogo.setOnClickListener {
-            findNavController(R.id.fvMain).navigate(R.id.listFragment)
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

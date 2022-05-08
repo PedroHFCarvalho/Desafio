@@ -28,7 +28,6 @@ class ListFragment : Fragment(), ItemClickListener {
     private var list: MutableList<ItemGithub> = mutableListOf()
     private var contPage = 1
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,7 +49,7 @@ class ListFragment : Fragment(), ItemClickListener {
 
                 }
             }
-            Log.d("Listagem", it.body()!!.items.toString())
+            //Log.d("Listagem", it.body()!!.items.toString())
             includeContentsInPage()
         }
 
@@ -65,10 +64,12 @@ class ListFragment : Fragment(), ItemClickListener {
             private fun getNextPage() {
                 val visibleItemCont = layoutManager.childCount
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                //Log.d("visibleItemCont", visibleItemCont.toString())
+                //Log.d("pastVisibleItem", pastVisibleItem.toString())
                 val total = adapterList.itemCount
                 if ((visibleItemCont + pastVisibleItem) >= total) {
                     contPage++
-                    Log.d("Cont Page", contPage.toString())
+                    //Log.d("Cont Page", contPage.toString())
                     getContentsForList(contPage)
                     includeContentsInPage()
                 }
