@@ -22,6 +22,7 @@ interface ApiService {
         @Path("repository") repos: String,
         @Query("state") state: String,
         @Query("sort") sort: String,
-        @Query("page") page: Int,
+        @Query("direction") direction: String,
+        @Query("page") page: Int
     ): Response<List<PullRequest>>
 }

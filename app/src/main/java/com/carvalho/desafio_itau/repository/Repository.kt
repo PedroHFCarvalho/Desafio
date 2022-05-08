@@ -18,7 +18,7 @@ class Repository {
         repos: String,
         page: Int
     ): Response<List<PullRequest>> {
-        return RetrofitInstance.api.getPullRequests(owner, repos, "all", "popularity", page)
+        return RetrofitInstance.api.getPullRequests(owner, repos, "all", "created", "desc", page)
     }
 
 }

@@ -40,6 +40,11 @@ class AdapterPulls() : RecyclerView.Adapter<AdapterPulls.CardViewHolder>() {
             holder.binding.tvStatus.text =
                 contents[position]!!.state.replaceFirstChar { it.uppercase() }
 
+            val data = contents[position]?.createdAt?.replaceAfter("T", " ")?.replace("T", " ")
+
+            holder.binding.tvData.text = data
+
+
             Glide.with(holder.itemView.context).load(contents[position]!!.user.avatar_url)
                 .placeholder(R.drawable.ic_baseline_account_circle)
                 .circleCrop()

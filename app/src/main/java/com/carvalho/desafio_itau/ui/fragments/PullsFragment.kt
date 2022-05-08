@@ -52,7 +52,6 @@ class PullsFragment : Fragment() {
                     }
                 }
             }
-
             //Log.d("Listagem Pulls", it.body().toString())
             includeContentsInPage()
             includeContentsInHeader()
@@ -61,17 +60,19 @@ class PullsFragment : Fragment() {
             binding.clContentCollapsing.visibility = View.VISIBLE
         }
 
-        binding.nsvScroll.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-            //Log.i("scrollY", scrollY.toString())
-            //Log.i("measuredHeight", v.measuredHeight.toString())
-            //Log.i("measuredHeight getChildAt", v.getChildAt(0).measuredHeight.toString())
-            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
-                contPage++
-                binding.progressBar.visibility = View.VISIBLE
-                getContentsForList(owner, nameRepos, contPage)
-                //Log.i("msg Scroll end", contPage.toString())
-            }
-        })
+        binding.nsvScroll.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+                val reference = (v.getChildAt(0).measuredHeight - v.measuredHeight)
+                //Log.d("reference", reference.toString())
+                if (scrollY > oldScrollY) {
+                    if (scrollY == reference) {
+                        contPage++
+                        binding.progressBar.visibility = View.VISIBLE
+                        getContentsForList(owner, nameRepos, contPage)
+                        //Log.d("msg Scroll end", contPage.toString())
+                    }
+                }
+            })
 
         return binding.root
     }

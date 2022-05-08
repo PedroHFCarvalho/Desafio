@@ -13,4 +13,6 @@ data class PullRequest(
     var user: User,
     @SerializedName("body")
     var body: String,
+    @SerializedName("created_at")
+    var createdAt: String
 )
