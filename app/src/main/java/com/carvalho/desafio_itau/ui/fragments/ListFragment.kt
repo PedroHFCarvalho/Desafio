@@ -70,7 +70,7 @@ class ListFragment : Fragment(), ItemClickListener {
                 //Log.d("pastVisibleItem", pastVisibleItem.toString())
                 val total = adapterList.itemCount
                 if (!isLoading) {
-                    if ((visibleItemCont + pastVisibleItem) >= total) {
+                    if ((visibleItemCont + pastVisibleItem) == total) {
                         contPage++
                         //Log.d("Cont Page", contPage.toString())
                         getContentsForList(contPage)
