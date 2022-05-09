@@ -2,6 +2,8 @@ package com.carvalho.desafio_itau.ui.fragments
 
 import com.carvalho.desafio_itau.model.ItemGithub
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +29,7 @@ class ListFragment : Fragment(), ItemClickListener {
 
     private var list: MutableList<ItemGithub> = mutableListOf()
     private var contPage = 1
+    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,10 +46,9 @@ class ListFragment : Fragment(), ItemClickListener {
         viewModel.responseRepositoryGit.observe(viewLifecycleOwner) {
             if (it.body()!!.items != null) {
                 it.body()!!.items!!.forEach { item ->
-                    if(!list.contains(item)){
+                    if (!list.contains(item)) {
                         list.add(item)
                     }
-
                 }
             }
             //Log.d("Listagem", it.body()!!.items.toString())
@@ -67,30 +69,36 @@ class ListFragment : Fragment(), ItemClickListener {
                 //Log.d("visibleItemCont", visibleItemCont.toString())
                 //Log.d("pastVisibleItem", pastVisibleItem.toString())
                 val total = adapterList.itemCount
-                if ((visibleItemCont + pastVisibleItem) >= total) {
-                    contPage++
-                    //Log.d("Cont Page", contPage.toString())
-                    getContentsForList(contPage)
-                    includeContentsInPage()
+                if (!isLoading) {
+                    if ((visibleItemCont + pastVisibleItem) >= total) {
+                        contPage++
+                        //Log.d("Cont Page", contPage.toString())
+                        getContentsForList(contPage)
+                        includeContentsInPage()
+                    }
                 }
             }
         })
-
         return binding.root
     }
 
+
     private fun includeContentsInPage() {
-        if (::adapterList.isInitialized) {
-            if (binding.rvList.adapter == null) {
+        isLoading = true
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (::adapterList.isInitialized) {
+                if (binding.rvList.adapter == null) {
+                    setAdapter()
+                    setListInAdapter()
+                } else {
+                    setListInAdapter()
+                }
+            } else {
                 setAdapter()
                 setListInAdapter()
-            } else {
-                setListInAdapter()
             }
-        } else {
-            setAdapter()
-            setListInAdapter()
-        }
+            isLoading = false
+        }, 50)
 
     }
 

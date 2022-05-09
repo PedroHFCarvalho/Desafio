@@ -49,6 +49,6 @@ class AdapterList(private val itemClickListener: ItemClickListener) :
 
     fun setList(list: List<ItemGithub>) {
         contents = list
-        notifyItemInserted(itemCount)
+        notifyDataSetChanged()
     }
 }
